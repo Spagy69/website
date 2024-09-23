@@ -1,2 +1,2 @@
 My website lol hope u like it :)
-im learning
+Dont take it seriously i just wanted to make a website :D
