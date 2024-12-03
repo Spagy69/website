@@ -47,6 +47,7 @@
         .hero {
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
@@ -57,12 +58,32 @@
             font-weight: 600;
             font-size: 3rem;
             margin-bottom: 1rem;
+            line-height: 1.2; /* Ujistíme se, že řádky mají stejnou výšku */
+            display: flex; /* Umožní zarovnat text i dynamický obsah do jedné řádky */
+            align-items: center; /* Vertikální zarovnání textu */
+            justify-content: center; /* Horizontální zarovnání */
         }
 
-        p {
-            font-weight: 300;
-            font-size: 1.25rem;
+        .typewriter {
+            display: inline-block;
+            font-weight: 600;
+            font-size: 3rem; /* Stejná velikost jako nadpis */
+            vertical-align: baseline; /* Přesné zarovnání vůči textu nadpisu */
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid #ffffff;
+            animation: blink 0.7s steps(2, start) infinite;
+            margin-left: 10px
         }
+
+        @keyframes blink {
+        from, to {
+            border-color: transparent;
+        }
+        50% {
+            border-color: #ffffff;
+        }
+    }
 
         /* Footer */
         footer {
@@ -107,7 +128,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Vítejte na Spagy Webu!</h1>
+            <h1>Vítej na<span class="typewriter" id="typewriter-text"></span></h1>
             <p>Jsem Spagy, a tohle je moje osobní stránka, kde můžete zjistit více o mně a mých dovednostech.</p>
         </div>
     </section>
@@ -176,7 +197,42 @@
             },
             "retina_detect": true
         });
+
+        // Typewriter effect with backspace
+        const texts = ["Spagy Webu!", "mé osobní stránce!", "mém portfoliu!"];
+        let currentIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function typeEffect() {
+            const text = texts[currentIndex];
+            const display = document.getElementById('typewriter-text');
+
+            if (isDeleting) {
+                if (charIndex > 0) {
+                    display.textContent = text.substring(0, charIndex - 1);
+                    charIndex--;
+                    setTimeout(typeEffect, 50);
+                } else {
+                    isDeleting = false;
+                    currentIndex = (currentIndex + 1) % texts.length;
+                    setTimeout(typeEffect, 500);
+                }
+            } else {
+                if (charIndex < text.length) {
+                    display.textContent = text.substring(0, charIndex + 1);
+                    charIndex++;
+                    setTimeout(typeEffect, 100);
+                } else {
+                    isDeleting = true;
+                    setTimeout(typeEffect, 2000);
+                }
+            }
+        }
+
+        typeEffect();
     </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
