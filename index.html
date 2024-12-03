@@ -58,32 +58,32 @@
             font-weight: 600;
             font-size: 3rem;
             margin-bottom: 1rem;
-            line-height: 1.2; /* Ujistíme se, že řádky mají stejnou výšku */
-            display: flex; /* Umožní zarovnat text i dynamický obsah do jedné řádky */
-            align-items: center; /* Vertikální zarovnání textu */
-            justify-content: center; /* Horizontální zarovnání */
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .typewriter {
             display: inline-block;
             font-weight: 600;
             font-size: 3rem; /* Stejná velikost jako nadpis */
-            vertical-align: baseline; /* Přesné zarovnání vůči textu nadpisu */
+            vertical-align: baseline;
             white-space: nowrap;
             overflow: hidden;
             border-right: 2px solid #ffffff;
             animation: blink 0.7s steps(2, start) infinite;
-            margin-left: 10px
+            margin-left: 10px; /* Přidáme mezeru mezi text */
         }
 
         @keyframes blink {
-        from, to {
-            border-color: transparent;
+            from, to {
+                border-color: transparent;
+            }
+            50% {
+                border-color: #ffffff;
+            }
         }
-        50% {
-            border-color: #ffffff;
-        }
-    }
 
         /* Footer */
         footer {
@@ -101,6 +101,30 @@
 
         footer a:hover {
             text-decoration: underline;
+        }
+
+        /* Media Query for mobile screens */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem; /* Menší velikost písma na mobilu */
+            }
+
+            .typewriter {
+                font-size: 2.5rem; /* Upravíme velikost textu i na mobilu */
+                margin-left: 8px; /* Menší mezera mezi texty */
+            }
+        }
+
+        /* Extra small mobile screens */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem; /* Ještě menší písmo pro menší obrazovky */
+            }
+
+            .typewriter {
+                font-size: 2rem; /* Upravíme text pro velmi malé obrazovky */
+                margin-left: 5px; /* Menší mezera */
+            }
         }
     </style>
 </head>
@@ -128,7 +152,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Vítej na<span class="typewriter" id="typewriter-text"></span></h1>
+            <h1>Vítejte na <span class="typewriter" id="typewriter-text"></span></h1>
             <p>Jsem Spagy, a tohle je moje osobní stránka, kde můžete zjistit více o mně a mých dovednostech.</p>
         </div>
     </section>
@@ -198,35 +222,26 @@
             "retina_detect": true
         });
 
-        // Typewriter effect with backspace
-        const texts = ["Spagy Webu!", "mé osobní stránce!", "mém portfoliu!"];
+        // Typewriter effect
+        const texts = ["Spagy Webu!", "osobní stránce!", "portfoliu!"];
         let currentIndex = 0;
         let charIndex = 0;
-        let isDeleting = false;
 
         function typeEffect() {
             const text = texts[currentIndex];
             const display = document.getElementById('typewriter-text');
 
-            if (isDeleting) {
-                if (charIndex > 0) {
-                    display.textContent = text.substring(0, charIndex - 1);
-                    charIndex--;
-                    setTimeout(typeEffect, 50);
-                } else {
-                    isDeleting = false;
-                    currentIndex = (currentIndex + 1) % texts.length;
-                    setTimeout(typeEffect, 500);
-                }
+            if (charIndex < text.length) {
+                display.textContent += text.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeEffect, 100);
             } else {
-                if (charIndex < text.length) {
-                    display.textContent = text.substring(0, charIndex + 1);
-                    charIndex++;
-                    setTimeout(typeEffect, 100);
-                } else {
-                    isDeleting = true;
-                    setTimeout(typeEffect, 2000);
-                }
+                setTimeout(() => {
+                    display.textContent = "";
+                    charIndex = 0;
+                    currentIndex = (currentIndex + 1) % texts.length;
+                    typeEffect();
+                }, 2000);
             }
         }
 
