@@ -62,18 +62,19 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-wrap: wrap; /* Allow text to wrap */
         }
 
         .typewriter {
             display: inline-block;
             font-weight: 600;
-            font-size: 3rem; /* Stejná velikost jako nadpis */
+            font-size: 3rem; /* Same size as the "Vítejte na" */
             vertical-align: baseline;
-            white-space: nowrap;
+            white-space: normal; /* Allows text to wrap */
             overflow: hidden;
             border-right: 2px solid #ffffff;
             animation: blink 0.7s steps(2, start) infinite;
-            margin-left: 10px; /* Přidáme mezeru mezi text */
+            margin-left: 10px; /* Space between text */
         }
 
         @keyframes blink {
@@ -106,24 +107,24 @@
         /* Media Query for mobile screens */
         @media (max-width: 768px) {
             h1 {
-                font-size: 2.5rem; /* Menší velikost písma na mobilu */
+                font-size: 2.5rem; /* Smaller font size for mobile */
             }
 
             .typewriter {
-                font-size: 2.5rem; /* Upravíme velikost textu i na mobilu */
-                margin-left: 8px; /* Menší mezera mezi texty */
+                font-size: 2.5rem; /* Adjust text size on mobile */
+                margin-left: 8px; /* Smaller space on mobile */
             }
         }
 
         /* Extra small mobile screens */
         @media (max-width: 480px) {
             h1 {
-                font-size: 2rem; /* Ještě menší písmo pro menší obrazovky */
+                font-size: 2rem; /* Even smaller font size for very small screens */
             }
 
             .typewriter {
-                font-size: 2rem; /* Upravíme text pro velmi malé obrazovky */
-                margin-left: 5px; /* Menší mezera */
+                font-size: 2rem; /* Adjust text size for very small screens */
+                margin-left: 5px; /* Even smaller space */
             }
         }
     </style>
@@ -152,8 +153,8 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Vítejte na <span class="typewriter" id="typewriter-text"></span></h1>
-            <p>Jsem Spagy, a tohle je moje osobní stránka, kde můžete zjistit více o mně a mých dovednostech.</p>
+            <h1>Vítej na <span class="typewriter"><span id="typewriter-text"></span></span></h1>
+            <p>Jmenuji se Vítek (Spagy), a tohle je moje osobní stránka, kde můžeš zjistit více o mně a mých dovednostech.</p>
         </div>
     </section>
 
@@ -222,26 +223,35 @@
             "retina_detect": true
         });
 
-        // Typewriter effect
-        const texts = ["Spagy Webu!", "osobní stránce!", "portfoliu!"];
+        // Typewriter effect with backspace animation
+        const texts = ["Spagy Webu!", "mé osobní stránce!", "mém portfoliu!"];
         let currentIndex = 0;
         let charIndex = 0;
+        let deleting = false;
 
         function typeEffect() {
             const text = texts[currentIndex];
             const display = document.getElementById('typewriter-text');
 
-            if (charIndex < text.length) {
-                display.textContent += text.charAt(charIndex);
-                charIndex++;
-                setTimeout(typeEffect, 100);
+            if (!deleting) {
+                if (charIndex < text.length) {
+                    display.textContent += text.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeEffect, 100);
+                } else {
+                    deleting = true;
+                    setTimeout(typeEffect, 1500); // Wait before starting to delete
+                }
             } else {
-                setTimeout(() => {
-                    display.textContent = "";
-                    charIndex = 0;
+                if (charIndex > 0) {
+                    display.textContent = text.substring(0, charIndex - 1);
+                    charIndex--;
+                    setTimeout(typeEffect, 100); // Speed of backspace
+                } else {
+                    deleting = false;
                     currentIndex = (currentIndex + 1) % texts.length;
-                    typeEffect();
-                }, 2000);
+                    setTimeout(typeEffect, 500); // Wait before starting to type again
+                }
             }
         }
 
