@@ -885,6 +885,12 @@
 
         let currentLanguage = 'en';
 
+        // Initialize language on page load
+        function initializeLanguage() {
+            // Automaticky aplikuj jazyk při načtení stránky
+            switchLanguage(currentLanguage);
+        }
+
         // Language switching functionality
         function switchLanguage(lang) {
             currentLanguage = lang;
@@ -923,8 +929,12 @@
             });
         });
 
-        // Loading screen
+        // Initialize everything when page loads
         window.addEventListener('load', () => {
+            // Initialize language first
+            initializeLanguage();
+            
+            // Then hide loading screen
             setTimeout(() => {
                 document.getElementById('loading').classList.add('hidden');
             }, 1000);
