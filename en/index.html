@@ -883,8 +883,9 @@
             }
         };
 
-        let currentLanguage = 'en';
-
+        // Inicializace jazyka z URL hned na začátku
+        let currentLanguage = window.location.pathname.includes('/en') ? 'en' : 'cs';
+        
         // Initialize language on page load
         function initializeLanguage() {
             // Automaticky aplikuj jazyk při načtení stránky
