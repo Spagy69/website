@@ -4,7 +4,7 @@
     <title>Spagy - Spagetak.com</title>
     <script>
         // Auto-redirect podle jazyka prohlížeče
-        const lang = navigator.language.startsWith('cs') ? 'cz' : 'en';
+        const lang = navigator.language.startsWith('cs') ? 'cs' : navigator.language.startsWith('en') ? 'en' : undefined;
         window.location.href = `/${lang}/`;
     </script>
 </head>
@@ -13,3 +13,4 @@
     <a href="/cs/">Česky</a> | <a href="/en/">English</a>
 </body>
 </html>
+
