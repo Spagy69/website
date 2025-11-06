@@ -72,11 +72,18 @@
             // Update typewriter text array
             typewriterText = translations[lang]['typewriter'];
             
-            // Reset typewriter if it's running
             if (typewriterRunning) {
+                clearTimeout(typeTimeoutId); // Stop the old loop
+
+                // Set new initial state
                 currentIndex = 0;
-                charIndex = 0;
-                isDeleting = false;
+                const firstText = typewriterText[currentIndex];
+                document.getElementById('typewriter').textContent = firstText;
+                charIndex = firstText.length;
+                isDeleting = true;
+                
+                // Start the new loop after a pause (matching your 'finished typing' speed)
+                typeTimeoutId = setTimeout(typeWriter, 2000);
             }
         }
 
@@ -93,6 +100,19 @@
             // Initialize language first
             initializeLanguage();
             
+            // --- NEW TYPEWRITER START LOGIC ---
+            // 1. Manually set the initial text
+            const firstText = typewriterText[currentIndex];
+            document.getElementById('typewriter').textContent = firstText;
+            
+            // 2. Set the state to "finished typing" (ready to delete)
+            charIndex = firstText.length;
+            isDeleting = true;
+            
+            // 3. Start the typeWriter loop *after* the initial pause
+            typeTimeoutId = setTimeout(typeWriter, 2500); // This 2000 matches your 'finished' speed
+            // --- END NEW LOGIC ---
+
             // Then hide loading screen
             setTimeout(() => {
                 document.getElementById('loading').classList.add('hidden');
@@ -244,6 +264,7 @@
         let charIndex = 0;
         let isDeleting = false;
         let typewriterRunning = false;
+        let typeTimeoutId;
 
         function typeWriter() {
             typewriterRunning = true;
@@ -269,10 +290,9 @@
                 typeSpeed = 500;
             }
 
-            setTimeout(typeWriter, typeSpeed);
+            typeTimeoutId = setTimeout(typeWriter, typeSpeed);
         }
 
-        typeWriter();
 
         // Navbar scroll effect
         window.addEventListener('scroll', () => {
